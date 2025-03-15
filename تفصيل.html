@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل المنتج</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        /* تنسيق المنتجات */
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            padding: 2rem;
+        }
+
+        .category {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(83, 44, 3, 0.361);
+            text-align: center;
+            padding: 1rem;
+            width: 300px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(238, 183, 4, 0.618);
+        }
+
+        .category img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .category h4 {
+            margin-top: 1rem;
+            color: black;
+            font-size: 1.2rem;
+        }
+
+        .category h5 {
+            color: #ff0000;
+            font-size: 1.1rem;
+            margin: 0.5rem 0;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            font-size: 14px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        .btn.details {
+            background-color: #0056b3;
+            color: #fff;
+        }
+
+        .btn.details:hover {
+            background-color: #004494;
+        }
+
+        .btn.add-to-cart {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .btn.add-to-cart:hover {
+            background-color: #218838;
+        }
+
+        /* تفاصيل المنتج */
+        .product-details {
+            width: 100%;
+            background: #fff;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 8px;
+            display: none;
+            position: relative;
+            text-align: center;
+        }
+
+        .close-btn {
+            background: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+
+        .star-rating {
+            color: gold;
+            font-size: 20px;
+        }
+
+        /* تصميم متجاوب للهواتف */
+        @media (max-width: 768px) {
+            .categories {
+                justify-content: center;
+                gap: 1rem;
+            }
+
+            .category {
+                width: 90%;
+            }
+
+            .buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    // التفصيل زار
+
+    document.querySelectorAll('.details').forEach(button => {
+      button.addEventListener('click', function() {
+          let category = this.closest('.category');
+    
+          // إزالة أي تفاصيل مفتوحة مسبقًا
+          let existingDetails = category.querySelector('.product-details');
+          if (existingDetails) {
+              existingDetails.remove();
+          }
+    
+          let name = category.dataset.name;
+          let img = category.dataset.img;
+          let description = category.dataset.description;
+          let rating = category.dataset.rating;
+          let price = category.dataset.price;
+    
+          let detailsDiv = document.createElement('div');
+          detailsDiv.classList.add('product-details');
+    
+          let shortDescription = description.substring(0, 50) + "..."; // عرض 50 حرفًا فقط
+          let isExpanded = false;
+    
+          let stars = "";
+          for (let i = 0; i < 5; i++) {
+              stars += i < rating ? "★" : "☆";
+          }
+    
+          detailsDiv.innerHTML = `
+              <button class="close-btn">إغلاق</button>
+              <img src="${img}" alt="صورة المنتج" width="100%">
+              <h4>${name}</h4>
+              <p class="desc">${shortDescription}</p>
+              <button class="btn toggle-desc">عرض المزيد</button>
+              <div class="star-rating">${stars}</div>
+              <h5 class="text-danger">EGP ${price}</h5>
+            
+          `;
+    
+          category.appendChild(detailsDiv);
+          detailsDiv.style.display = 'block';
+    
+          // إضافة حدث إغلاق التفاصيل
+          detailsDiv.querySelector('.close-btn').addEventListener('click', function() {
+              detailsDiv.remove();
+          });
+    
+          // إضافة حدث لزر "عرض المزيد"
+          let toggleBtn = detailsDiv.querySelector('.toggle-desc');
+          let descParagraph = detailsDiv.querySelector('.desc');
+    
+          toggleBtn.addEventListener('click', function() {
+              if (isExpanded) {
+                  descParagraph.innerHTML = shortDescription;
+                  toggleBtn.textContent = "عرض المزيد";
+              } else {
+                  descParagraph.innerHTML = description;
+                  toggleBtn.textContent = "عرض أقل";
+              }
+              isExpanded = !isExpanded;
+          });
+      });
+    });
+    
+    
+
+
+
+
+
+
+
+
+
+
+<!-- index
+ 
+-->
+
+
+// تحديد عناصر النموذج
+const loginForm = document.querySelector('form');
+const usernameInput = document.querySelector('input[name="username"]');
+const passwordInput = document.querySelector('input[name="password"]');
+
+// التعامل مع الحدث عند محاولة تسجيل الدخول
+loginForm.addEventListener('submit', (e) => {
+    e.preventDefault(); // منع السلوك الافتراضي للنموذج
+
+    // جلب القيم المدخلة
+    const enteredUsername = usernameInput.value;
+    const enteredPassword = passwordInput.value;
+
+    // استرجاع البيانات المخزنة في localStorage
+    const storedUsers = JSON.parse(localStorage.getItem('users')) || [];
+
+    // التحقق من وجود مستخدم بنفس البيانات
+    const userFound = storedUsers.find(user => 
+        user.name === enteredUsername && user.password === enteredPassword
+    );
+
+    if (userFound) {
+        // إذا كان المستخدم موجودًا
+        Swal.fire({
+            icon: 'success',
+            title: 'تم تسجيل الدخول بنجاح!',
+            showConfirmButton: false,
+            timer: 1500 // إغلاق التنبيه تلقائيًا بعد 1.5 ثانية
+        });
+
+        // عرض رسالة ترحيب باستخدام Toastify
+        Toastify({
+            text: `مرحبًا ${enteredUsername}!`,
+            duration: 3000, // مدة ظهور الرسالة (3 ثوانٍ)
+            close: true, // إظهار زر الإغلاق
+            gravity: "top", // موقع الرسالة (أعلى الصفحة)
+            position: "center", // محاذاة الرسالة (في المنتصف)
+            backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)", // لون الخلفية
+            stopOnFocus: true, // إيقاف الإغلاق التلقائي عند التركيز على الرسالة
+        }).showToast();
+
+        // توجيه المستخدم إلى الصفحة الرئيسية بعد 2 ثانية
+        setTimeout(() => {
+            window.location.href = './home.html';
+        }, 2000);
+    } else {
+        // إذا كانت البيانات غير صحيحة
+        Swal.fire({
+            icon: 'error',
+            title: 'خطأ',
+            text: 'اسم المستخدم أو كلمة المرور غير صحيحة.',
+        });
+    }
+
+    // إعادة تعيين الحقول
+    loginForm.reset();
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <section class="categories container">
+        <div class="category" data-name="مسجل فيديو 1" data-img="./images1.jpg" data-description="هذا المنتج رائع يحتوي على العديد من المميزات مثل الدقة العالية، سهولة التركيب، وقدرته على تسجيل الفيديوهات بجودة فائقة الوضوح." data-rating="4" data-price="1450">
+            <img src="./images1.jpg" alt="منتج" />
+            <h4>مسجل فيديو رقمي 4 قنوات بدقة 1080</h4>
+            <h5 class="text-danger">EGP 1450</h5>
+            <div class="buttons">
+                <button class="btn details">تفاصيل المنتج</button>
+                <button class="btn add-to-cart">إضافة إلى السلة</button>
+            </div>
+        </div>
+       
+    </section>
+
+    <script>
+        document.querySelectorAll('.details').forEach(button => {
+            button.addEventListener('click', function() {
+                let category = this.closest('.category');
+
+                // إزالة أي تفاصيل مفتوحة مسبقًا
+                let existingDetails = category.querySelector('.product-details');
+                if (existingDetails) {
+                    existingDetails.remove();
+                }
+
+                let name = category.dataset.name;
+                let img = category.dataset.img;
+                let description = category.dataset.description;
+                let rating = category.dataset.rating;
+                let price = category.dataset.price;
+
+                let detailsDiv = document.createElement('div');
+                detailsDiv.classList.add('product-details');
+
+                let shortDescription = description.substring(0, 50) + "..."; // عرض 50 حرفًا فقط
+                let isExpanded = false;
+
+                let stars = "";
+                for (let i = 0; i < 5; i++) {
+                    stars += i < rating ? "★" : "☆";
+                }
+
+                detailsDiv.innerHTML = `
+                    <button class="close-btn">إغلاق</button>
+                    <img src="${img}" alt="صورة المنتج" width="100%">
+                    <h4>${name}</h4>
+                    <p class="desc">${shortDescription}</p>
+                    <button class="btn toggle-desc">عرض المزيد</button>
+                    <div class="star-rating">${stars}</div>
+                    <h5 class="text-danger">EGP ${price}</h5>
+                    <button class="btn add-to-cart">إضافة إلى السلة</button>
+                `;
+
+                category.appendChild(detailsDiv);
+                detailsDiv.style.display = 'block';
+
+                // إضافة حدث إغلاق التفاصيل
+                detailsDiv.querySelector('.close-btn').addEventListener('click', function() {
+                    detailsDiv.remove();
+                });
+
+                // إضافة حدث لزر "عرض المزيد"
+                let toggleBtn = detailsDiv.querySelector('.toggle-desc');
+                let descParagraph = detailsDiv.querySelector('.desc');
+
+                toggleBtn.addEventListener('click', function() {
+                    if (isExpanded) {
+                        descParagraph.innerHTML = shortDescription;
+                        toggleBtn.textContent = "عرض المزيد";
+                    } else {
+                        descParagraph.innerHTML = description;
+                        toggleBtn.textContent = "عرض أقل";
+                    }
+                    isExpanded = !isExpanded;
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
